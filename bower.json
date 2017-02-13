@@ -3,9 +3,10 @@
   "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#^1.2.0",
     "paper-elements": "polymerelements/paper-elements#^1.0.7",
-    "iron-elements": "polymerelements/iron-elements#^1.0.10"
+    "iron-elements": "polymerelements/iron-elements#^1.0.10",
+    "vaadin-core-elements": "vaadin/vaadin-core-elements#^1.4.0",
+    "vaadin-charts": "vaadin/vaadin-charts#^3.2.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
