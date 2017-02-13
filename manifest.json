@@ -1,0 +1,6 @@
+{
+  "name": "tshirt-shop",
+  "short_name": "tshirt-shop",
+  "start_url": "/",
+  "display": "standalone"
+}

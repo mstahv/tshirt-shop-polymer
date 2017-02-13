@@ -1,0 +1,167 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+<dom-module id="tshirt-shop-app">
+  <template>
+    <style>
+      :host {
+        font-family: 'Montserrat';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: #FFFFFF;
+        padding: 40px;
+        color: #33383a;
+        line-height: 1.6;
+        font-weight: 300;
+        --dark-primary-color: #33383a;
+        --primary-color: #00b4f0;
+        --light-primary-color: #F2FAF9;
+        --text-primary-color: #FFFFFF;
+        --accent-color: #ff3a39;
+        --light-accent-color: #F2FAF9;
+        --primary-text-color: rgba(0, 0, 0, 0.87);
+        --secondary-text-color: #727272;
+        --primary-background-color: #FFFFFF;
+        --disabled-text-color: #BDBDBD;
+        --divider-color: #B6B6B6;
+        --paper-menu-background-color: #fff;
+        --menu-link-color: #111111;
+        --paper-input-container-underline: {
+          background: #dbdbdb;
+        }
+      }
+      
+      .model {
+        position: absolute;
+        bottom: 0;
+        right: 20px;
+        height: calc(0.6 * 100vw);
+      }
+      
+      @media (max-width: 900px) {
+        .model {
+          height: 180px;
+          z-index: 100;
+        }
+      }
+      
+      h1 {
+        font-weight: 200;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 3rem;
+      }
+      
+      .content {
+        position: relative;
+        max-width: 600px;
+        background: #fff;
+        z-index: 1;
+      }
+      
+      .intro {
+        font-size: 1.2em;
+      }
+      
+      .highlight {
+        font-weight: 400;
+      }
+      
+      #form {
+        display: block;
+        margin-top: 100px;
+      }
+      
+      #form > * {
+        margin-bottom: 20px;
+      }
+      
+      paper-button {
+        background: var(--primary-color);
+        color: var(--light-primary-color);
+        font-weight: 500;
+      }
+      
+      .placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eee;
+        border: 1px solid #ccc;
+        height: 50px;
+        width: 100%;
+      }
+    </style>
+    <img src="vaadin-tshirt.jpg" alt="person with tshirt" class="model">
+
+    <div class="content">
+      <h1>Get a Vaadin t-shirt!</h1>
+
+      <p class="intro">
+        Our Vaadin t-shirt shop is almost done, we are just missing a few things. If you can help us finish the UI, we'll give you
+        a t-shirt!
+      </p>
+      <p class="intro">
+        In addition to the <span class="highlight">size</span>, we need your <span class="highlight">name</span> and <span
+          class="highlight">email</span> for super fast delivery!
+      </p>
+      <form is="iron-form" id="form" method="post" content-type="application/json" action="http://vaad.in/orderTShirt" disable-native-validation-ui>
+
+        <!-- TODO: replace the div with a <vaadin-combo-box>, 
+          bind the size array to items and set it's name attribute to 'shirtSize' -->
+        <!--<div class="placeholder">Add size selector here</div>-->
+
+        <paper-input label="Name" name="name" required></paper-input>
+        <paper-input label="Email" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"></paper-input>
+        <paper-button raised on-tap="_submit">Order t-shirt!</paper-button>
+      </form>
+    </div>
+
+    <paper-toast id="toast"></paper-toast>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'tshirt-shop-app',
+
+      properties: {
+        sizes: {
+          type: Array,
+          value: ['Small', 'Medium', 'Large', 'Extra Large', 'XXL']
+        }
+      },
+
+      listeners: {
+        'iron-form-error': '_showError',
+        'iron-form-response': '_showSuccess'
+      },
+
+      _submit: function () {
+        this.$.form.submit();
+      },
+
+      _showSuccess: function () {
+        const toast = this.$.toast;
+        toast.text = "Order successful!";
+        toast.open();
+        this.$.form.reset();
+      },
+
+      _showError: function (evt) {
+        const toast = this.$.toast;
+        toast.text = "Order failed, check the console for errors.";
+        toast.open();
+        console.log(evt.detail);
+      }
+    });
+  </script>
+</dom-module>
