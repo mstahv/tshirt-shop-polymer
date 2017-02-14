@@ -124,8 +124,10 @@
       </p>
       <form is="iron-form" id="form" method="post" content-type="application/json" action="http://vaad.in/orderTShirt" disable-native-validation-ui>
 
-        <!-- TODO: replace the div with a <vaadin-combo-box>, 
-          bind the size array to items and set it's name attribute to 'shirtSize' -->
+        <!-- TODO: -->
+        <!-- 1. replace the placeholder <div> below with a <vaadin-combo-box> -->
+        <!-- 2. bind items="[[sizes]]" (defined in properties below) -->
+        <!-- 3. set name="shirtSize" -->
         <div class="placeholder">Add size selector here</div>
 
         <paper-input label="Name" name="name" required></paper-input>
