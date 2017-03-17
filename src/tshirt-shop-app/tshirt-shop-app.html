@@ -11,7 +11,7 @@
 <dom-module id="tshirt-shop-app">
   <template>
     <style>
-      :host {
+       :host {
         font-family: 'Roboto';
         display: block;
         position: absolute;
@@ -84,7 +84,7 @@
         margin-top: 100px;
       }
       
-      #form > * {
+      #form>* {
         margin-bottom: 20px;
       }
       
@@ -119,7 +119,8 @@
         a t-shirt!
       </p>
       <p class="intro">
-        In addition to the <span class="highlight">size</span>, we need your <span class="highlight">name</span> and <span
+        In addition to the <span class="highlight">size</span>, we need your <span class="highlight">name</span> and
+        <span
           class="highlight">email</span> for super fast delivery!
       </p>
       <form is="iron-form" id="form" method="post" content-type="application/json" action="http://vaad.in/orderTShirt" disable-native-validation-ui>
@@ -147,7 +148,7 @@
       properties: {
         sizes: {
           type: Array,
-          value: ['Medium', 'Large', 'Extra Large']
+          value: ['Small', 'Medium', 'Large', 'Extra Large']
         }
       },
 
