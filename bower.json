@@ -2,17 +2,17 @@
   "name": "tshirt-shop",
   "main": "index.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0",
-    "paper-elements": "polymerelements/paper-elements#^1.0.7",
-    "iron-elements": "polymerelements/iron-elements#^1.0.10",
-    "vaadin-core-elements": "vaadin/vaadin-core-elements#^1.4.0",
-    "vaadin-charts": "vaadin/vaadin-charts#^3.2.0",
-    "vaadin-grid": "vaadin/vaadin-grid#^2.0.0"
+    "polymer": "Polymer/polymer#^2.0.0",
+    "paper-elements": "PolymerElements/paper-input#^2.0.0",
+    "paper-button": "PolymerElements/paper-button#^2.0.0",
+    "paper-toast": "PolymerElements/paper-toast#^2.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^2.0.0",
+    "iron-form": "PolymerElements/iron-form#2.0-preview",
+    "iron-image": "PolymerElements/iron-image#^2.0.0",
+    "vaadin-core-elements": "vaadin/vaadin-core-elements#master"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   }
 }

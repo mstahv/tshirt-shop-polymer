@@ -1,12 +1,21 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/vaadin-core-elements/vaadin-core-elements.html">
-<link rel="import" href="../../bower_components/vaadin-charts/vaadin-charts.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import"
+  href="../../bower_components/polymer/polymer-element.html">
+<link rel="import"
+  href="../../bower_components/vaadin-core-elements/vaadin-core-elements.html">
+<link rel="import"
+  href="../../bower_components/vaadin-charts/vaadin-charts.html">
+<link rel="import"
+  href="../../bower_components/paper-input/paper-input.html">
+<link rel="import"
+  href="../../bower_components/paper-button/paper-button.html">
+<link rel="import"
+  href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import"
+  href="../../bower_components/iron-form/iron-form.html">
+<link rel="import"
+  href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import"
+  href="../../bower_components/iron-image/iron-image.html">
 
 <dom-module id="tshirt-shop-app">
   <template>
@@ -41,28 +50,28 @@
           background: #dbdbdb;
         }
       }
-      
+
       .model {
         position: absolute;
         bottom: 0;
         right: 20px;
         height: calc(0.6 * 100vw);
       }
-      
+
       @media (max-width: 900px) {
         .model {
           height: 180px;
           z-index: 100;
         }
       }
-      
+
       h1 {
         font-weight: 200;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-size: 3rem;
       }
-      
+
       .content {
         font-family: 'Montserrat';
         position: relative;
@@ -70,30 +79,30 @@
         background: #fff;
         z-index: 1;
       }
-      
+
       .intro {
         font-size: 1.2em;
       }
-      
+
       .highlight {
         font-weight: 400;
       }
-      
+
       #form {
         display: block;
         margin-top: 100px;
       }
-      
+
       #form>* {
         margin-bottom: 20px;
       }
-      
+
       paper-button {
         background: var(--primary-color);
         color: var(--light-primary-color);
         font-weight: 500;
       }
-      
+
       .placeholder {
         display: flex;
         align-items: center;
@@ -103,13 +112,15 @@
         height: 50px;
         width: 100%;
       }
-      
+
       vaadin-grid iron-image {
         height: 30px;
         width: 30px;
       }
     </style>
-    <img src="vaadin-tshirt.jpg" alt="person with tshirt" class="model">
+    <img src="/src/tshirt-shop-app/vaadin-tshirt.jpg"
+      alt="person with tshirt"
+      class="model">
 
     <div class="content">
       <h1>Get a Vaadin t-shirt!</h1>
@@ -122,57 +133,71 @@
         In addition to the <span class="highlight">size</span>, we need your <span class="highlight">name</span> and
         <span class="highlight">email</span> for super fast delivery!
       </p>
-      <form is="iron-form" id="form" method="post" content-type="application/json" action="http://vaad.in/orderTShirt" disable-native-validation-ui>
+      <iron-form id="form"
+        content-type="application/json"
+        disable-native-validation-ui
+        on-iron-form-error="_showError"
+        on-iron-form-response="_showSuccess">
+        <form is="iron-form"
+          method="post"
+          action="http://vaad.in/orderTShirt">
 
-        <!-- TODO: -->
-        <!-- 1. replace the placeholder <div> below with a <vaadin-combo-box> -->
-        <!-- 2. bind items="[[sizes]]" (defined in properties below) -->
-        <!-- 3. set name="shirtSize" -->
-        <div class="placeholder">Add size selector here</div>
+          <!-- TODO: -->
+          <!-- 1. replace the placeholder <div> below with a <vaadin-combo-box> -->
+          <!-- 2. bind items="[[sizes]]" (defined in properties below) -->
+          <!-- 3. set name="shirtSize" -->
+          <div class="placeholder">Add size selector here</div>
 
-        <paper-input label="Name" name="name" required></paper-input>
-        <paper-input label="Email" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"></paper-input>
-        <paper-button raised on-tap="_submit">Order t-shirt!</paper-button>
-      </form>
+          <paper-input label="Name"
+            name="name"
+            required></paper-input>
+          <paper-input label="Email"
+            name="email"
+            pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"></paper-input>
+          <paper-button raised
+            on-click="_submit">Order t-shirt!</paper-button>
+        </form>
+      </iron-form>
     </div>
 
     <paper-toast id="toast"></paper-toast>
   </template>
 
   <script>
-    Polymer({
+    class TshirtShopApp extends Polymer.Element {
 
-      is: 'tshirt-shop-app',
+      static get is() {
+        return 'tshirt-shop-app';
+      }
 
-      properties: {
-        sizes: {
-          type: Array,
-          value: ['Small', 'Medium', 'Large', 'Extra Large']
-        }
-      },
+      static get properties() {
+        return {
+          sizes: {
+            type: Array,
+            value: ['Small', 'Medium', 'Large', 'Extra Large']
+          }
+        };
+      }
 
-      listeners: {
-        'iron-form-error': '_showError',
-        'iron-form-response': '_showSuccess'
-      },
-
-      _submit: function () {
+      _submit() {
         this.$.form.submit();
-      },
+      }
 
-      _showSuccess: function () {
+      _showSuccess() {
         const toast = this.$.toast;
         toast.text = "Order successful!";
         toast.open();
         this.$.form.reset();
-      },
+      }
 
-      _showError: function (evt) {
+      _showError(evt) {
         const toast = this.$.toast;
         toast.text = "Order failed, check the console for errors.";
         toast.open();
         console.log(evt.detail);
       }
-    });
+    }
+
+    customElements.define(TshirtShopApp.is, TshirtShopApp);
   </script>
 </dom-module>
