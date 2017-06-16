@@ -175,12 +175,7 @@
       }
 
       submit() {
-        const valid = Array.from(this.shadowRoot.querySelector('.form').children)
-          .map(e => {
-            return e.validate ? !!e.validate() : true;
-          })
-          .reduce((a, b) => a && b);
-        if (valid) {
+        if (this.formValid()) {
           fetch('http://vaad.in/orderTShirt', {
             method: 'POST',
             body: JSON.stringify(this.order),
@@ -198,6 +193,14 @@
         } else {
           this.showError('Please validate your input.');
         }
+      }
+
+      formValid() {
+        return Array.from(this.shadowRoot.querySelector('.form').children)
+          .map(e => {
+            return e.validate ? !!e.validate() : true;
+          })
+          .reduce((a, b) => a && b);
       }
 
       showSuccess() {
