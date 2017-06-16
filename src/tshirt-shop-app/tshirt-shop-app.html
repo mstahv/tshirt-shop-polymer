@@ -88,12 +88,12 @@
         font-weight: 400;
       }
 
-      #form {
+      .form {
         display: block;
         margin-top: 100px;
       }
 
-      #form>* {
+      .form>* {
         margin-bottom: 20px;
       }
 
@@ -133,31 +133,23 @@
         In addition to the <span class="highlight">size</span>, we need your <span class="highlight">name</span> and
         <span class="highlight">email</span> for super fast delivery!
       </p>
-      <iron-form id="form"
-        content-type="application/json"
-        disable-native-validation-ui
-        on-iron-form-error="_showError"
-        on-iron-form-response="_showSuccess">
-        <form is="iron-form"
-          method="post"
-          action="http://vaad.in/orderTShirt">
+      <div class="form">
+        <!-- TODO: -->
+        <!-- 1. replace the placeholder <div> below with a <vaadin-combo-box> -->
+        <!-- 2. bind items="[[sizes]]" (defined in properties below) -->
+        <!-- 3. Bind value to order object with value="{{order.shirtSize}}" -->
+        <div class="placeholder">Add size selector here</div>
 
-          <!-- TODO: -->
-          <!-- 1. replace the placeholder <div> below with a <vaadin-combo-box> -->
-          <!-- 2. bind items="[[sizes]]" (defined in properties below) -->
-          <!-- 3. set name="shirtSize" -->
-          <div class="placeholder">Add size selector here</div>
-
-          <paper-input label="Name"
-            name="name"
-            required></paper-input>
-          <paper-input label="Email"
-            name="email"
-            pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"></paper-input>
-          <paper-button raised
-            on-click="_submit">Order t-shirt!</paper-button>
-        </form>
-      </iron-form>
+        <paper-input label="Name"
+          value="{{order.name}}"
+          required></paper-input>
+        <paper-input label="Email"
+          value="{{order.email}}"
+          pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+          required></paper-input>
+        <paper-button raised
+          on-click="submit">Order t-shirt!</paper-button>
+      </div>
     </div>
 
     <paper-toast id="toast"></paper-toast>
@@ -165,13 +157,16 @@
 
   <script>
     class TshirtShopApp extends Polymer.Element {
-
       static get is() {
         return 'tshirt-shop-app';
       }
 
       static get properties() {
         return {
+          order: {
+            type: Object,
+            value: () => { return {}; }
+          },
           sizes: {
             type: Array,
             value: ['Small', 'Medium', 'Large', 'Extra Large']
@@ -179,22 +174,46 @@
         };
       }
 
-      _submit() {
-        this.$.form.submit();
+      submit() {
+        const valid = Array.from(this.shadowRoot.querySelector('.form').children)
+          .map(e => {
+            return e.validate ? !!e.validate() : true;
+          })
+          .reduce((a, b) => a && b);
+        if (valid) {
+          fetch('http://vaad.in/orderTShirt', {
+            method: 'POST',
+            body: JSON.stringify(this.order),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(res => {
+            if (res.status === 200) {
+              this.showSuccess();
+              this.order = {};
+            } else {
+              res.text().then(text => this.showError('Submit failed', text))
+            }
+          });
+        } else {
+          this.showError('Please validate your input.');
+        }
       }
 
-      _showSuccess() {
+      showSuccess() {
         const toast = this.$.toast;
-        toast.text = "Order successful!";
+        toast.text = 'Order successful!';
         toast.open();
-        this.$.form.reset();
       }
 
-      _showError(evt) {
+      showError(message, error) {
+        if (error) {
+          message += ` (${error})`;
+        }
         const toast = this.$.toast;
-        toast.text = "Order failed, check the console for errors.";
+        toast.text = message;
         toast.open();
-        console.log(evt.detail);
+        console.log(error);
       }
     }
 
