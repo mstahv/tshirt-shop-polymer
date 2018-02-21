@@ -114,6 +114,7 @@
           return;
         }
         try {
+          this.saveLocally(this.order);
           const res = await fetch('http://vaad.in/orderTShirt', {
             method: 'POST',
             body: JSON.stringify(this.order),
@@ -154,6 +155,20 @@
 
         this.$.notification.open();
         console.log(error);
+      }
+
+      async saveLocally(order) {
+        try {
+          const savedOrders = await localforage.getItem('orders') || [];
+          savedOrders.push({
+            timestamp: new Date(),
+            ...order
+          });
+
+          localforage.setItem('orders', savedOrders);
+        } catch (e) {
+          console.log('Local save failed. Giving up.')
+        }
       }
     }
 

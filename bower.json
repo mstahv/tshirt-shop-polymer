@@ -4,7 +4,8 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "vaadin": "vaadin/vaadin#10.0.0-alpha19",
-    "vaadin-notification": "vaadin/vaadin-notification#data-binding"
+    "vaadin-notification": "vaadin/vaadin-notification#data-binding",
+    "localforage": "^1.5.6"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
