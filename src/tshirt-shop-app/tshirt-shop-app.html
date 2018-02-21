@@ -1,59 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/vaadin-core-elements/vaadin-core-elements.html">
-<link rel="import" href="../../bower_components/vaadin-charts/vaadin-charts.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-notification/vaadin-notification.html">
 
 <dom-module id="tshirt-shop-app">
   <template>
     <style>
-       :host {
-        font-family: 'Roboto';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: #FFFFFF;
+      :host {
         padding: 40px;
-        color: #33383a;
-        line-height: 1.6;
-        font-weight: 300;
-        --dark-primary-color: #33383a;
-        --primary-color: #00b4f0;
-        --light-primary-color: #F2FAF9;
-        --text-primary-color: #FFFFFF;
-        --accent-color: #ff3a39;
-        --light-accent-color: #F2FAF9;
-        --primary-text-color: rgba(0, 0, 0, 0.87);
-        --secondary-text-color: #727272;
-        --primary-background-color: #FFFFFF;
-        --disabled-text-color: #BDBDBD;
-        --divider-color: #B6B6B6;
-        --paper-menu-background-color: #fff;
-        --menu-link-color: #111111;
-        --paper-input-container-underline: {
-          background: #dbdbdb;
-        }
-      }
-
-      .model {
-        position: absolute;
-        bottom: 0;
-        right: 20px;
-        height: calc(0.6 * 100vw);
-      }
-
-      @media (max-width: 900px) {
-        .model {
-          height: 180px;
-          z-index: 100;
-        }
       }
 
       h1 {
@@ -64,10 +19,8 @@
       }
 
       .content {
-        font-family: 'Montserrat';
         position: relative;
         max-width: 600px;
-        background: #fff;
         z-index: 1;
       }
 
@@ -82,16 +35,11 @@
       .form {
         display: block;
         margin-top: 100px;
+        max-width: 400px;
       }
 
       .form>* {
-        margin-bottom: 20px;
-      }
-
-      paper-button {
-        background: var(--primary-color);
-        color: var(--light-primary-color);
-        font-weight: 500;
+        width: 100%;
       }
 
       .placeholder {
@@ -102,41 +50,40 @@
         border: 1px solid #ccc;
         height: 50px;
         width: 100%;
+        margin: 20px 0;
       }
 
-      vaadin-grid iron-image {
-        height: 30px;
-        width: 30px;
-      }
     </style>
-    <img src="/src/tshirt-shop-app/vaadin-tshirt.jpg" alt="person with tshirt" class="model">
-
     <div class="content">
       <h1>Get a Vaadin t-shirt!</h1>
 
       <p class="intro">
-        Our Vaadin t-shirt shop is almost done, we are just missing a few things. If you can help us finish the UI, we'll give you
-        a t-shirt!
+        Our Vaadin t-shirt shop is almost done, we are just missing a few things. If you can help us
+        finish the UI, we'll give you a t-shirt!
       </p>
       <p class="intro">
-        In addition to the <span class="highlight">size</span>, we need your <span class="highlight">name</span> and
+        In addition to the
+        <span class="highlight">size</span>, we need your
+        <span class="highlight">name</span> and
         <span class="highlight">email</span> for super fast delivery!
       </p>
       <div class="form">
+        <vaadin-text-field label="Name" value="{{order.name}}" required></vaadin-text-field>
+        <vaadin-text-field label="Email" value="{{order.email}}" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+          required></vaadin-text-field>
         <!-- TODO: -->
         <!-- 1. replace the placeholder <div> below with a <vaadin-combo-box> -->
         <!-- 2. bind items="[[sizes]]" (defined in properties below) -->
         <!-- 3. Bind value to order object with value="{{order.shirtSize}}" -->
         <div class="placeholder">Add size selector here</div>
 
-        <paper-input label="Name" value="{{order.name}}" required></paper-input>
-        <paper-input label="Email" value="{{order.email}}" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
-          required></paper-input>
-        <paper-button raised on-click="submit">Order t-shirt!</paper-button>
+        <vaadin-button theme="primary" on-click="submit">Order t-shirt!</vaadin-button>
       </div>
     </div>
 
-    <paper-toast id="toast"></paper-toast>
+    <vaadin-notification duration="4000" position="middle" id="notification">
+      <template>[[notificationMessage]]</template>
+    </vaadin-notification>
   </template>
 
   <script>
@@ -149,33 +96,40 @@
         return {
           order: {
             type: Object,
-            value: () => { return {}; }
+            value: () => {
+              return {};
+            }
           },
           sizes: {
             type: Array,
             value: ['Small', 'Medium', 'Large', 'Extra Large', 'XXL']
-          }
+          },
+          notificationMessage: String
         };
       }
 
-      submit() {
-        if (this.formValid()) {
-          fetch('http://vaad.in/orderTShirt', {
+      async submit() {
+        if (!this.formValid()) {
+          this.showError('Please validate your input.');
+          return;
+        }
+        try {
+          const res = await fetch('http://vaad.in/orderTShirt', {
             method: 'POST',
             body: JSON.stringify(this.order),
             headers: {
               'Content-Type': 'application/json'
             }
-          }).then(res => {
-            if (res.status === 200) {
-              this.showSuccess();
-              this.order = {};
-            } else {
-              res.text().then(text => this.showError('Submit failed', text))
-            }
           });
-        } else {
-          this.showError('Please validate your input.');
+
+          if (res.status === 200) {
+            this.showSuccess();
+            this.order = {};
+          } else {
+            this.showError('Submit failed', await res.text());
+          }
+        } catch (e) {
+          this.showError('Request failed', e);
         }
       }
 
@@ -188,22 +142,22 @@
       }
 
       showSuccess() {
-        const toast = this.$.toast;
-        toast.text = 'Order successful!';
-        toast.open();
+        this.notificationMessage = 'Order successful!';
+        this.$.notification.open();
       }
 
       showError(message, error) {
         if (error) {
           message += ` (${error})`;
         }
-        const toast = this.$.toast;
-        toast.text = message;
-        toast.open();
+        this.notificationMessage = message;
+
+        this.$.notification.open();
         console.log(error);
       }
     }
 
     customElements.define(TshirtShopApp.is, TshirtShopApp);
+
   </script>
 </dom-module>
